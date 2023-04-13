@@ -35,7 +35,7 @@ let count = 1;
             document.getElementById("coupon-tab").style.marginBottom = "0px";
         }
         }
-        async function handleButton(nameOption, surnameOption, couponOption, idOfWidget = "") {
+        async function handleButton(nameOption, surnameOption, couponOption, frmCount, idOfWidget = "") {  
         let campaign = "";
         const widgetId = widgetInfo.widgetID;
         const nameOfHost = widgetInfo.hostName;
@@ -50,9 +50,9 @@ let count = 1;
             campaign = splitParam[1];
             }
         }
-        name = nameOption === 1 ? document.getElementById("name").value : '';
-        email = document.getElementById("email").value;
-        surname = surnameOption === 1 ? document.getElementById("surname").value : '';
+        name = nameOption === 1 ? document.getElementsByClassName("input-name")[frmCount].value : '';
+        email = document.getElementsByClassName("input-email")[frmCount].value;
+        surname = surnameOption === 1 ? document.getElementsByClassName("input-surname")[frmCount].value : '';
         couponCode = couponOption === 1 ? document.getElementById("coupon").value : '';
         let apiResp;
         const userData = {
@@ -93,9 +93,9 @@ let count = 1;
             </div>`;
         }
         if (apiResp.toLowerCase() === "undefined") {
-            document.getElementById("api-error-msg").innerHTML = ``;
+            document.getElementsByClassName("api-err")[frmCount].innerHTML = ``;
         } else {
-            document.getElementById("api-error-msg").innerHTML = `* ${apiResp}`;
+            document.getElementsByClassName("api-err")[frmCount].innerHTML = `* ${apiResp}`;
         }
         }
         function ValidateEmail(input) {
@@ -215,8 +215,12 @@ let count = 1;
         }
         window.onload = async (event) => {
         const window = event.target;        
-        const element = window.querySelector('[data-widgetid]');
-        const idOfWidget = element.getAttribute('data-widgetid');
+        const elements = window.querySelectorAll('[data-widgetid]');
+        
+        await elements.forEach(async (element) => {           
+            const idOfWidget = element.getAttribute('data-widgetid');
+            const idOfForm = parseInt(element.getAttribute('data-formid'));
+            
         const statusObject = {
             "active": 1,
             "inactive": 0
@@ -232,7 +236,7 @@ let count = 1;
                 platform: 'ops'
             },
             }
-        ).then(res => res.json()).then(result => {
+        ).then(res => res.json()).then(result => {            
             return result.data[0];
         })
         const widgetMeta = JSON.parse(widgetData.widget_meta);
@@ -248,19 +252,20 @@ let count = 1;
         element.innerHTML = statusOfWidget ? `<div id="first-modal" style="display:block;"><div class="form-trial w-form">
         <form id="wf-form-Trial-form" name="wf-form-Trial-form" data-name="Trial form" method="post" class="formformform" aria-label="Trial form">
             <div class="grid-1-1 form">
-                <input type="text" class="campo w-input" maxlength="256" name="Name-form" data-name="Name form" placeholder="Nome..." id="name" required>                
-                <input type="text" class="campo w-node-_6e48be95-97ba-b3f5-451e-82c491c607da-91c607d6 w-input" maxlength="256" name="Cognome-form" data-name="Cognome form" placeholder="Cognome..." id="surname" required>
+                <input type="text" class="campo w-input input-name" maxlength="256" name="Name-form" data-name="Name form" placeholder="Nome..." id="name" required>                
+                <input type="text" class="campo w-node-_6e48be95-97ba-b3f5-451e-82c491c607da-91c607d6 w-input input-surname" maxlength="256" name="Cognome-form" data-name="Cognome form" placeholder="Cognome..." id="surname" required>
             </div>
             <div class="grid-2-1">
-                <input type="email" class="campo w-input" maxlength="256" name="Mail-form" data-name="Mail form" placeholder="La tua email..." id="email" required>
-                <div id="w-node" class="submit-flex" onclick="handleButton(1, 1, 0)">
+                <input type="email" class="campo w-input input-email" maxlength="256" name="Mail-form" data-name="Mail form" placeholder="La tua email..." id="email" required>
+                <div id="w-node" class="submit-flex" onclick="handleButton(1, 1, 0, ${idOfForm})">
                     <input type="button" id="free-trial" value="Prova per 7 giorni" data-wait="Un istante..." class="submit test w-button">
                     <div class="postilla">Unisciti a migliaia di lettori soddisfatti</div></div>
                 </div>
             </form>
-            <div id="api-error-msg" class="testo18" style="color: red; margin-bottom: 1em;"></div>
+            <div id="api-error-msg" class="api-err" style="color: red; margin-bottom: 1em;"></div>
             <div class="successo w-form-done" tabindex="-1" role="region" aria-label="Trial form success">
             <div class="testo16">Grazie! La prova gratuita è stata avviata con successo.</div>
         </div>
-        <div class="errore w-form-fail" tabindex="-1" role="region" aria-label="Trial form failure"><div>Qualcosa non ha funzionato.<br>Riprova, oppure contattaci a support@goodmorningitalia.it</div></div></div></div><div id="second-modal" class="testo18"></div>`:'';        
+        <div class="errore w-form-fail" tabindex="-1" role="region" aria-label="Trial form failure"><div>Qualcosa non ha funzionato.<br>Riprova, oppure contattaci a support@goodmorningitalia.it</div></div></div></div><div id="second-modal"></div>`:'';        
+        });                
         };
