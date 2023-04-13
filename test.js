@@ -258,9 +258,9 @@ let count = 1;
                     <div class="postilla">Unisciti a migliaia di lettori soddisfatti</div></div>
                 </div>
             </form>
-            <div id="api-error-msg" style="color: red; margin-bottom: 1em;"></div>
+            <div id="api-error-msg" class="testo18" style="color: red; margin-bottom: 1em;"></div>
             <div class="successo w-form-done" tabindex="-1" role="region" aria-label="Trial form success">
             <div class="testo16">Grazie! La prova gratuita è stata avviata con successo.</div>
         </div>
-        <div class="errore w-form-fail" tabindex="-1" role="region" aria-label="Trial form failure"><div>Qualcosa non ha funzionato.<br>Riprova, oppure contattaci a support@goodmorningitalia.it</div></div></div></div><div id="second-modal"></div>`:'';        
+        <div class="errore w-form-fail" tabindex="-1" role="region" aria-label="Trial form failure"><div>Qualcosa non ha funzionato.<br>Riprova, oppure contattaci a support@goodmorningitalia.it</div></div></div></div><div id="second-modal" class="testo18"></div>`:'';        
         };
