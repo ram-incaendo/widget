@@ -84,9 +84,9 @@ let count = 1;
             }
             });
         if (apiResp && apiResp.toLowerCase() === "success") {
-            document.getElementById("first-modal").style.display = "none";
-            document.getElementById("second-modal").style.display = "block";
-            document.getElementById("second-modal").innerHTML = `<h2>Controlla la tua email</h2>
+            document.getElementsByClassName("first-modal")[frmCount].style.display = "none";
+            document.getElementsByClassName("second-modal")[frmCount].style.display = "block";
+            document.getElementsByClassName("second-modal")[frmCount].innerHTML = `<h2>Controlla la tua email</h2>
             <p>Completa la registrazione verificando il tuo profilo dalla email che ti abbiamo inviato a  <b>${email}</b>.</p>
             <p>Non hai ricevuto l’email? Inviala di nuovo o <a href="javascript:updateEmail();" ><b>Aggiorna il tuo indirizzo email</b></a></p>
             <p>Sei già registrato? <a href="https://app.dev.goodmorningitalia.it/login"><b>Fai il login qui</b></a></p>
@@ -249,7 +249,7 @@ let count = 1;
             widgetID: idOfWidget,
             hostName,
         }
-        element.innerHTML = statusOfWidget ? `<div id="first-modal" style="display:block;"><div class="form-trial w-form">
+        element.innerHTML = statusOfWidget ? `<div id="first-modal" class="first-modal" style="display:block;"><div class="form-trial w-form">
         <form id="wf-form-Trial-form" name="wf-form-Trial-form" data-name="Trial form" method="post" class="formformform" aria-label="Trial form">
             <div class="grid-1-1 form">
                 <input type="text" class="campo w-input input-name" maxlength="256" name="Name-form" data-name="Name form" placeholder="Nome..." id="name" required>                
@@ -266,6 +266,6 @@ let count = 1;
             <div class="successo w-form-done" tabindex="-1" role="region" aria-label="Trial form success">
             <div class="testo16">Grazie! La prova gratuita è stata avviata con successo.</div>
         </div>
-        <div class="errore w-form-fail" tabindex="-1" role="region" aria-label="Trial form failure"><div>Qualcosa non ha funzionato.<br>Riprova, oppure contattaci a support@goodmorningitalia.it</div></div></div></div><div id="second-modal"></div>`:'';        
+        <div class="errore w-form-fail" tabindex="-1" role="region" aria-label="Trial form failure"><div>Qualcosa non ha funzionato.<br>Riprova, oppure contattaci a support@goodmorningitalia.it</div></div></div></div><div id="second-modal" class="second-modal"></div>`:'';        
         });                
         };
