@@ -3,6 +3,63 @@ let count = 1;
         let email = "";
         let surname = "";
         let widgetInfo = {};
+
+        const showError = (input) => {        
+            const formField = input;
+            formField.classList.remove('success');
+            formField.classList.add('error');
+        };
+
+        const showSuccess = (input) => {            
+            const formField = input;
+            
+            formField.classList.remove('error');
+            formField.classList.add('success');       
+        }
+
+        const isEmailValid = (email) => {
+            const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            return email.match(re);
+        };
+
+        function checkFirstName(firstName){
+            let valid = false;
+            
+            if(firstName.value.trim() == ''){
+                showError(firstName);
+            }else{
+                showSuccess(firstName);
+                valid = true;
+            }
+            return valid;
+        }
+
+        function checkLastName(lastName){
+            let valid = false;
+            
+            if(lastName.value.trim() == ''){
+                showError(lastName);
+            }else{
+                showSuccess(lastName);
+                valid = true;
+            }
+            return valid;
+        }
+
+        function checkEmail(email){
+            let valid = false;        
+            
+            if(email.value.trim() == ''){
+                showError(email);
+            }else if(!isEmailValid(email.value.trim())){
+                showError(email);
+            }else{
+                showSuccess(email);
+                valid = true;
+            }
+            return valid;
+        }
+
         function updateEmail() {
         document.getElementById("first-modal").style.display = "block";
         document.getElementById("api-error-msg").innerHTML = ``;
@@ -50,53 +107,65 @@ let count = 1;
             campaign = splitParam[1];
             }
         }
-        name = nameOption === 1 ? document.getElementsByClassName("input-name")[frmCount].value : '';
-        email = document.getElementsByClassName("input-email")[frmCount].value;
-        surname = surnameOption === 1 ? document.getElementsByClassName("input-surname")[frmCount].value : '';
-        couponCode = couponOption === 1 ? document.getElementById("coupon").value : '';
-        let apiResp;
-        const userData = {
-            action: "signup",
-            email: email,
-            nicename: name,
-            surName: surname,
-            campaign: campaign,
-        };
+        name = nameOption === 1 ? document.getElementsByClassName("input-name")[frmCount].value.trim() : '';
+        email = document.getElementsByClassName("input-email")[frmCount].value.trim();
+        surname = surnameOption === 1 ? document.getElementsByClassName("input-surname")[frmCount].value.trim() : '';
+        couponCode = couponOption === 1 ? document.getElementById("coupon").value.trim() : '';
 
-        if (couponCode !== '') userData.couponCode = couponCode;
-        const response = await fetch(
-            `https://api.dev.goodmorningitalia.it/auth?utm_referral=${widgetId}&utm_source=gmi&utm_campaign=${campaign}&utm_name=${nameOfHost}`,
-            {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(userData),
+        let isFirstnameValid = checkFirstName(document.getElementsByClassName("input-name")[frmCount]),
+        isLastnameValid = checkLastName(document.getElementsByClassName("input-surname")[frmCount]),
+        isEmailValid = checkEmail(document.getElementsByClassName("input-email")[frmCount]);
+        
+        let isFormValid = isFirstnameValid &&
+        isLastnameValid &&
+        isEmailValid;
+
+        if(isFormValid){
+            let apiResp;
+            const userData = {
+                action: "signup",
+                email: email,
+                nicename: name,
+                surName: surname,
+                campaign: campaign,
+            };
+
+            if (couponCode !== '') userData.couponCode = couponCode;
+            const response = await fetch(
+                `https://api.dev.goodmorningitalia.it/auth?utm_referral=${widgetId}&utm_source=gmi&utm_campaign=${campaign}&utm_name=${nameOfHost}`,
+                {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(userData),
+                }
+            )
+                .then((res) => res.json())
+                .then((result) => {
+                const hasKey = "msg" in result;
+                if (hasKey) {
+                    apiResp = result.msg;
+                } else {
+                    apiResp = result.message;
+                }
+                });
+            if (apiResp && apiResp.toLowerCase() === "success") {
+                document.getElementsByClassName("first-modal")[frmCount].style.display = "none";
+                document.getElementsByClassName("second-modal")[frmCount].style.display = "block";
+                document.getElementsByClassName("second-modal")[frmCount].innerHTML = `<h2>Controlla la tua email</h2>
+                <p>Completa la registrazione verificando il tuo profilo dalla email che ti abbiamo inviato a  <b>${email}</b>.</p>
+                <p>Non hai ricevuto l’email? Inviala di nuovo o <a href="javascript:updateEmail();" ><b>Aggiorna il tuo indirizzo email</b></a></p>
+                <p>Sei già registrato? <a href="https://app.dev.goodmorningitalia.it/login"><b>Fai il login qui</b></a></p>
+                </div>`;
             }
-        )
-            .then((res) => res.json())
-            .then((result) => {
-            const hasKey = "msg" in result;
-            if (hasKey) {
-                apiResp = result.msg;
+            if (apiResp.toLowerCase() === "undefined") {
+                document.getElementsByClassName("api-err")[frmCount].innerHTML = ``;
             } else {
-                apiResp = result.message;
+                document.getElementsByClassName("api-err")[frmCount].innerHTML = `* ${apiResp}`;
             }
-            });
-        if (apiResp && apiResp.toLowerCase() === "success") {
-            document.getElementsByClassName("first-modal")[frmCount].style.display = "none";
-            document.getElementsByClassName("second-modal")[frmCount].style.display = "block";
-            document.getElementsByClassName("second-modal")[frmCount].innerHTML = `<h2>Controlla la tua email</h2>
-            <p>Completa la registrazione verificando il tuo profilo dalla email che ti abbiamo inviato a  <b>${email}</b>.</p>
-            <p>Non hai ricevuto l’email? Inviala di nuovo o <a href="javascript:updateEmail();" ><b>Aggiorna il tuo indirizzo email</b></a></p>
-            <p>Sei già registrato? <a href="https://app.dev.goodmorningitalia.it/login"><b>Fai il login qui</b></a></p>
-            </div>`;
         }
-        if (apiResp.toLowerCase() === "undefined") {
-            document.getElementsByClassName("api-err")[frmCount].innerHTML = ``;
-        } else {
-            document.getElementsByClassName("api-err")[frmCount].innerHTML = `* ${apiResp}`;
-        }
+
         }
         function ValidateEmail(input) {
         var validRegex =
@@ -161,7 +230,7 @@ let count = 1;
         const couponDetails = async () => {
         const couponCode = document.getElementById("coupon").value;
         const response = await fetch("http://api.dev.goodmorningitalia.it/coupon-types?$limit=50");
-        const myJson = await response.json(); //extract JSON from the http response
+        const myJson = await response.json();
         const coupon = myJson.data;
         const couponPrefix = couponCode.substring(0, 4);
         let couponType = coupon.find(
