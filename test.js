@@ -60,10 +60,10 @@ let count = 1;
             return valid;
         }
 
-        function updateEmail() {
-        document.getElementById("first-modal").style.display = "block";
-        document.getElementById("api-error-msg").innerHTML = ``;
-        document.getElementById("second-modal").style.display = "none";
+        function updateEmail(frmCount) {
+        document.getElementsByClassName("first-modal")[frmCount].style.display = "block";
+        document.getElementsByClassName("api-err")[frmCount].innerHTML = ``;
+        document.getElementsByClassName("second-modal")[frmCount].style.display = "none";
         }
         function couponFunction() {
         count++;
@@ -155,7 +155,7 @@ let count = 1;
                 document.getElementsByClassName("second-modal")[frmCount].style.display = "block";
                 document.getElementsByClassName("second-modal")[frmCount].innerHTML = `<h2>Controlla la tua email</h2>
                 <p>Completa la registrazione verificando il tuo profilo dalla email che ti abbiamo inviato a  <b>${email}</b>.</p>
-                <p>Non hai ricevuto l’email? Inviala di nuovo o <a href="javascript:updateEmail();" ><b>Aggiorna il tuo indirizzo email</b></a></p>
+                <p>Non hai ricevuto l’email? Inviala di nuovo o <a href="javascript:updateEmail(${frmCount});" ><b>Aggiorna il tuo indirizzo email</b></a></p>
                 <p>Sei già registrato? <a href="https://app.dev.goodmorningitalia.it/login"><b>Fai il login qui</b></a></p>
                 </div>`;
             }
