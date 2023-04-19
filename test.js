@@ -132,7 +132,7 @@ let count = 1;
 
             if (couponCode !== '') userData.couponCode = couponCode;
             const response = await fetch(
-                `https://api.dev.goodmorningitalia.it/auth?utm_referral=${widgetId}&utm_source=gmi&utm_campaign=${campaign}&utm_name=${nameOfHost}`,
+                `https://api.goodmorningitalia.it/auth?utm_referral=${widgetId}&utm_source=gmi&utm_campaign=${campaign}&utm_name=${nameOfHost}`,
                 {
                 method: "POST",
                 headers: {
@@ -156,7 +156,7 @@ let count = 1;
                 document.getElementsByClassName("second-modal")[frmCount].innerHTML = `<h2>Controlla la tua email</h2>
                 <p>Completa la registrazione verificando il tuo profilo dalla email che ti abbiamo inviato a  <b>${email}</b>.</p>
                 <p>Non hai ricevuto l’email? Inviala di nuovo o <a href="javascript:updateEmail(${frmCount});" ><b>Aggiorna il tuo indirizzo email</b></a></p>
-                <p>Sei già registrato? <a href="https://app.dev.goodmorningitalia.it/login"><b>Fai il login qui</b></a></p>
+                <p>Sei già registrato? <a href="https://app.goodmorningitalia.it/login"><b>Fai il login qui</b></a></p>
                 </div>`;
             }
             if (apiResp.toLowerCase() === "undefined") {
@@ -229,7 +229,7 @@ let count = 1;
         }
         const couponDetails = async () => {
         const couponCode = document.getElementById("coupon").value;
-        const response = await fetch("http://api.dev.goodmorningitalia.it/coupon-types?$limit=50");
+        const response = await fetch("http://api.goodmorningitalia.it/coupon-types?$limit=50");
         const myJson = await response.json();
         const coupon = myJson.data;
         const couponPrefix = couponCode.substring(0, 4);
@@ -295,7 +295,7 @@ let count = 1;
             "inactive": 0
         }
         const widgetData = await fetch(
-            `https://api.dev.goodmorningitalia.it/widget?widget_id=${idOfWidget}`,
+            `https://api.goodmorningitalia.it/widget?widget_id=${idOfWidget}`,
 
             {
             method: "GET",
