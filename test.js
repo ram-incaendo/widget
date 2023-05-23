@@ -1,3 +1,4 @@
+console.log("Widget loaded..");
 let count = 1;
         let name = "";
         let email = "";
@@ -283,17 +284,20 @@ let count = 1;
         data1.innerHTML = `<button style="background-color:black;">ADD</button>`;
         }
         window.onload = async (event) => {
+        console.log("Window onload event called..");
         const window = event.target;        
         const elements = window.querySelectorAll('[data-widgetid]');
         
         await elements.forEach(async (element) => {           
             const idOfWidget = element.getAttribute('data-widgetid');
             const idOfForm = parseInt(element.getAttribute('data-formid'));
+            console.log("Loading form for widget id "+idOfWidget+" and form "+idOfForm);    
             
         const statusObject = {
             "active": 1,
             "inactive": 0
         }
+        console.log("Calling widget api for widget id "+idOfWidget);
         const widgetData = await fetch(
             `https://api.goodmorningitalia.it/widget?widget_id=${idOfWidget}`,
 
@@ -305,7 +309,8 @@ let count = 1;
                 platform: 'ops'
             },
             }
-        ).then(res => res.json()).then(result => {            
+        ).then(res => res.json()).then(result => {
+            console.log("Call to widget api for widget id "+idOfWidget+" called successfully with response "+json.stringify(result));
             return result.data[0];
         })
         const widgetMeta = JSON.parse(widgetData.widget_meta);
