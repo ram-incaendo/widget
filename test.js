@@ -310,7 +310,7 @@ let count = 1;
             },
             }
         ).then(res => res.json()).then(result => {
-            console.log("Call to widget api for widget id "+idOfWidget+" called successfully with response "+json.stringify(result));
+            console.log("Call to widget api for widget id "+idOfWidget+" called successfully with response "+JSON.stringify(result));
             return result.data[0];
         })
         const widgetMeta = JSON.parse(widgetData.widget_meta);
