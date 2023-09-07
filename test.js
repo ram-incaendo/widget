@@ -4,41 +4,6 @@ let name = "";
 let email = "";
 let surname = "";
 let widgetInfo = {};
-let utm_referral = "";
-
-const params = new URLSearchParams(window.location.search);
-utm_referral = params.get('utm_source');
-
-console.log("utm_referral value: ", utm_referral);
-
-const setCookie = (name,value,days) => {
-    var expires = "";
-    if (days) {
-        var date = new Date();
-        date.setTime(date.getTime() + (days*24*60*60*1000));
-        expires = "; expires=" + date.toUTCString();
-    }
-    document.cookie = name + "=" + (value || "")  + expires + "; path=/";
-}
-
-const getCookie = (name) => {
-    var nameEQ = name + "=";
-    var ca = document.cookie.split(';');
-    for(var i=0;i < ca.length;i++) {
-        var c = ca[i];
-        while (c.charAt(0)==' ') c = c.substring(1,c.length);
-        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
-    }
-    return null;
-}
-
-const eraseCookie = (name) => { 
-    document.cookie = name +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-}
-
-if(utm_referral !== '' && utm_referral === 'satispay'){
-    setCookie('referral','satispay',1);
-}
 
 const showError = (input) => {        
     const formField = input;
@@ -130,7 +95,7 @@ if (count % 2 === 0) {
 }
 async function handleButton(nameOption, surnameOption, couponOption, frmCount, idOfWidget = "") {  
 let campaign = "";
-let widgetId = widgetInfo.widgetID;
+const widgetId = widgetInfo.widgetID;
 const nameOfHost = widgetInfo.hostName;
 const params = window.location.search.substr(1).split("&");
 for (const param of params) {
@@ -143,6 +108,31 @@ for (const param of params) {
     campaign = splitParam[1];
     }
 }
+
+let utmSource, utmMedium, utmCampaign, utmContent, utmTerm;
+
+const queryParams = {};
+const url = window.location.search;
+const searchParams = new URLSearchParams(url);
+searchParams.forEach((value, key) => {
+    queryParams[key] = value;
+});
+
+let utmURL = '';
+
+if (typeof queryParams.utmMedium !== 'undefined') {
+    utmMedium = queryParams.utmMedium;
+    utmURL += '&utmMedium='+utmMedium;
+}
+if (typeof queryParams.utmContent !== 'undefined') {
+    utmContent = queryParams.utmContent;
+    utmURL += '&utmContent='+utmContent;
+}
+if (typeof queryParams.utmTerm !== 'undefined') {
+    utmTerm = queryParams.utmTerm;
+    utmURL += '&utmTerm='+utmTerm;
+}
+    
 name = nameOption === 1 ? document.getElementsByClassName("input-name")[frmCount].value.trim() : '';
 email = document.getElementsByClassName("input-email")[frmCount].value.trim();
 surname = surnameOption === 1 ? document.getElementsByClassName("input-surname")[frmCount].value.trim() : '';
@@ -157,14 +147,6 @@ isLastnameValid &&
 isEmailValid;
 
 if(isFormValid){
-
-    var referral = (getCookie('referral')!==null)?getCookie('referral'):'webflow';     
-    eraseCookie('referral');
-
-    if(referral === 'satispay'){
-        widgetId = '6ce22786358f0ac6e36b72dec572291c';
-    }
-
     let apiResp;
     const userData = {
         action: "signup",
@@ -175,8 +157,15 @@ if(isFormValid){
     };
 
     if (couponCode !== '') userData.couponCode = couponCode;
+
+    let authURL = `https://api.goodmorningitalia.it/auth?utm_referral=${widgetId}&utm_source=gmi&utm_campaign=${campaign}&utm_name=${nameOfHost}`;
+
+    if(utmURL !== ''){
+        authURL += utmURL;
+    }
+        
     const response = await fetch(
-        `https://api.goodmorningitalia.it/auth?utm_referral=${widgetId}&utm_source=gmi&utm_campaign=${campaign}&utm_name=${nameOfHost}`,
+        authURL,
         {
         method: "POST",
         headers: {
