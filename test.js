@@ -120,16 +120,16 @@ searchParams.forEach((value, key) => {
 
 let utmURL = '';
 
-if (typeof queryParams.utmMedium !== 'undefined') {
-    utmMedium = queryParams.utmMedium;
+if (typeof queryParams.utm_medium !== 'undefined') {
+    utmMedium = queryParams.utm_medium;
     utmURL += '&utmMedium='+utmMedium;
 }
-if (typeof queryParams.utmContent !== 'undefined') {
-    utmContent = queryParams.utmContent;
+if (typeof queryParams.utm_content !== 'undefined') {
+    utmContent = queryParams.utm_content;
     utmURL += '&utmContent='+utmContent;
 }
-if (typeof queryParams.utmTerm !== 'undefined') {
-    utmTerm = queryParams.utmTerm;
+if (typeof queryParams.utm_term !== 'undefined') {
+    utmTerm = queryParams.utm_term;
     utmURL += '&utmTerm='+utmTerm;
 }
     
