@@ -132,6 +132,10 @@ if (typeof queryParams.utm_term !== 'undefined') {
     utmTerm = queryParams.utm_term;
     utmURL += '&utmTerm='+utmTerm;
 }
+if (typeof queryParams.utm_campaign !== 'undefined') {
+    utmTerm = queryParams.utm_campaign;
+    utmURL += '&utmCampaign='+utmTerm;
+}    
     
 name = nameOption === 1 ? document.getElementsByClassName("input-name")[frmCount].value.trim() : '';
 email = document.getElementsByClassName("input-email")[frmCount].value.trim();
@@ -157,23 +161,7 @@ if(isFormValid){
     };
 
     if (couponCode !== '') userData.couponCode = couponCode;
-
-    if (typeof queryParams.utm_medium !== 'undefined') {
-        userData.utmMedium = queryParams.utm_medium;
-    }
-
-    if (typeof queryParams.utm_campaign !== 'undefined') {
-        userData.utmCampaign = queryParams.utm_campaign;
-    }
-
-    if (typeof queryParams.utm_content !== 'undefined') {
-        userData.utmContent = queryParams.utm_content;
-    }
-
-    if (typeof queryParams.utm_term !== 'undefined') {
-        userData.utmTerm = queryParams.utm_term;
-    }
-
+    
     let authURL = `https://api.goodmorningitalia.it/auth?utm_referral=${widgetId}&utm_source=gmi&utm_campaign=${campaign}&utm_name=${nameOfHost}`;
 
     if(utmURL !== ''){
