@@ -158,6 +158,22 @@ if(isFormValid){
 
     if (couponCode !== '') userData.couponCode = couponCode;
 
+    if (typeof queryParams.utm_medium !== 'undefined') {
+        userData.utmMedium = queryParams.utm_medium;
+    }
+
+    if (typeof queryParams.utm_campaign !== 'undefined') {
+        userData.utmCampaign = queryParams.utm_campaign;
+    }
+
+    if (typeof queryParams.utm_content !== 'undefined') {
+        userData.utmContent = queryParams.utm_content;
+    }
+
+    if (typeof queryParams.utm_term !== 'undefined') {
+        userData.utmTerm = queryParams.utm_term;
+    }
+
     let authURL = `https://api.goodmorningitalia.it/auth?utm_referral=${widgetId}&utm_source=gmi&utm_campaign=${campaign}&utm_name=${nameOfHost}`;
 
     if(utmURL !== ''){
