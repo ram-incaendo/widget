@@ -119,7 +119,7 @@ searchParams.forEach((value, key) => {
 });
 
 let utmURL = '';
-let utmSource = 'gmi';
+utmSource = 'gmi';
 
 if (typeof queryParams.utm_medium !== 'undefined') {
     utmMedium = queryParams.utm_medium;
