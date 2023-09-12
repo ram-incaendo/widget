@@ -61,6 +61,15 @@ function checkEmail(email){
     return valid;
 }
 
+function sanitizeUrlPramas(url) {
+    // expecting unwanted character at 1st position to removing
+    return `&${url.substring(1, url.length)}`;
+}
+
+function getUtmSource(url) {    
+    return !(url.includes('utm_source')) ? `utm_source='gmi'` : '';
+}
+
 function updateEmail(frmCount) {
 document.getElementsByClassName("first-modal")[frmCount].style.display = "block";
 document.getElementsByClassName("api-err")[frmCount].innerHTML = ``;
@@ -113,33 +122,7 @@ let utmSource, utmMedium, utmCampaign, utmContent, utmTerm;
 
 const queryParams = {};
 const url = window.location.search;
-const searchParams = new URLSearchParams(url);
-searchParams.forEach((value, key) => {
-    queryParams[key] = value;
-});
-
-let utmURL = '';
-utmSource = 'gmi';
-
-if (typeof queryParams.utm_medium !== 'undefined') {
-    utmMedium = queryParams.utm_medium;
-    utmURL += '&utmMedium='+utmMedium;
-}
-if (typeof queryParams.utm_content !== 'undefined') {
-    utmContent = queryParams.utm_content;
-    utmURL += '&utmContent='+utmContent;
-}
-if (typeof queryParams.utm_term !== 'undefined') {
-    utmTerm = queryParams.utm_term;
-    utmURL += '&utmTerm='+utmTerm;
-}
-if (typeof queryParams.utm_campaign !== 'undefined') {
-    utmTerm = queryParams.utm_campaign;
-    utmURL += '&utmCampaign='+utmTerm;
-}
-if (typeof queryParams.utm_source !== 'undefined') {
-    utmSource = queryParams.utm_source;    
-}
+const sanitizedUrl = sanitizeUrlPramas(url);
     
 name = nameOption === 1 ? document.getElementsByClassName("input-name")[frmCount].value.trim() : '';
 email = document.getElementsByClassName("input-email")[frmCount].value.trim();
@@ -166,12 +149,12 @@ if(isFormValid){
 
     if (couponCode !== '') userData.couponCode = couponCode;
     
-    let authURL = `https://api.goodmorningitalia.it/auth?utm_referral=${widgetId}&utm_source=${utmSource}&utm_campaign=${campaign}&utm_name=${nameOfHost}`;
-
-    if(utmURL !== ''){
-        authURL += utmURL;
-    }
-        
+    let authURL = `https://api.goodmorningitalia.it/auth?utm_referral=${widgetId}&utm_name=${nameOfHost}`;
+    
+    authURL += sanitizedUrl;
+    utmSource = getUtmSource(sanitizedUrl);
+    authURL += utmSource;
+            
     const response = await fetch(
         authURL,
         {
