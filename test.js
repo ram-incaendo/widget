@@ -5,6 +5,10 @@ let email = "";
 let surname = "";
 let widgetInfo = {};
 
+if(window.location.search !== ''){
+    localStorage.setItem('url',window.location.search);
+}
+
 const showError = (input) => {        
     const formField = input;
     formField.classList.remove('success');
@@ -121,7 +125,12 @@ for (const param of params) {
 let utmSource, utmMedium, utmCampaign, utmContent, utmTerm;
 
 const queryParams = {};
-const url = window.location.search;
+let url = window.location.search;
+
+if(url === ''){
+    url = localStorage.getItem('url');
+}
+    
 const sanitizedUrl = sanitizeUrlPramas(url);
     
 name = nameOption === 1 ? document.getElementsByClassName("input-name")[frmCount].value.trim() : '';
@@ -167,6 +176,7 @@ if(isFormValid){
     )
         .then((res) => res.json())
         .then((result) => {
+        localStorage.setItem('url','');
         const hasKey = "msg" in result;
         if (hasKey) {
             apiResp = result.msg;
