@@ -127,7 +127,7 @@ let utmSource, utmMedium, utmCampaign, utmContent, utmTerm;
 const queryParams = {};
 let url = window.location.search;
 
-if(url === ''){
+if(url === '' && localStorage.getItem('url') !== null){
     url = localStorage.getItem('url');
 }
     
