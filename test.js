@@ -162,7 +162,7 @@ if(isFormValid){
     
     authURL += sanitizedUrl;
     utmSource = getUtmSource(sanitizedUrl);
-    authURL += utmSource;
+    authURL = `${authURL}&${utmSource}`;
             
     const response = await fetch(
         authURL,
