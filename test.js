@@ -171,8 +171,7 @@ if(isFormValid){
             }
           });
         });
-      });
-    });
+      });    
 
     let apiResp;
     const userData = {
