@@ -157,21 +157,16 @@ isEmailValid;
 
 if(isFormValid){
 
-    const freeTrialButtons = document.querySelectorAll("#free-trial");
-
-      freeTrialButtons.forEach(button => {
-        button.addEventListener("click", function() {
-        console.log("User Signup Occured");
-          pushToDataLayer('webflowFormSubmit', {
-            action: 'signup',
-            user: {
-                name: name,
-                surname: surname,
-                email: email
-            }
-          });
-        });
-      });    
+    console.log("User Signup Occured");
+    
+    pushToDataLayer('webflowFormSubmit', {
+    action: 'signup',
+    user: {
+        name: name,
+        surname: surname,
+        email: email
+    }
+    });   
 
     let apiResp;
     const userData = {
