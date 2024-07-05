@@ -128,6 +128,15 @@ if (count % 2 === 0) {
     document.getElementById("coupon-tab").style.marginBottom = "0px";
 }
 }
+
+function pushToDataLayer(event, eventData) {
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({
+      event: event,
+      ...eventData
+    });
+  }
+
 async function handleButton(nameOption, surnameOption, couponOption, frmCount, idOfWidget = "") {  
 let campaign = "";
 let widgetId = widgetInfo.widgetID;
@@ -157,6 +166,15 @@ isLastnameValid &&
 isEmailValid;
 
 if(isFormValid){
+
+    pushToDataLayer('webflowFormSubmit', {
+    action: 'signup',
+    user: {
+        name: name,
+        surname: surname,
+        email: email
+    }
+    });
 
     var referral = (getCookie('referral')!==null)?getCookie('referral'):'webflow';     
     eraseCookie('referral');
